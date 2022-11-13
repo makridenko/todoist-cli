@@ -6,7 +6,7 @@ import sys
 import click
 from dotenv import load_dotenv
 
-from connector import TodoistConnector
+from .connector import TodoistConnector
 
 
 load_dotenv('.env')
@@ -23,7 +23,7 @@ def todoist_cli():
 
 @todoist_cli.command()
 def get_tasks_due_today() -> None:
-    """ List of all today tasks from todoist """
+    """List of all today tasks from todoist"""
     connector = TodoistConnector(api_key=TODOIST_API_KEY)
     sys.stdout.write(connector.get_tasks_due_today() + '\n')
 

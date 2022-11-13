@@ -6,7 +6,7 @@ from typing import List
 import requests
 from requests import Response
 
-from entities.task import Due, Task
+from .entities.task import Due, Task
 
 
 class TodoistConnector:
