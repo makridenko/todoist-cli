@@ -25,3 +25,14 @@ class Task:
     section_id: Optional[int] = None
     assignee_id: Optional[int] = None
     assigner_id: Optional[int] = None
+
+    priority_colors = {
+        1: '\033[97m {}\033[00m',
+        2: '\033[96m {}\033[00m',
+        3: '\033[93m {}\033[00m',
+        4: '\033[91m {}\033[00m',
+    }
+
+    def __str__(self) -> str:
+        _content = f'- [] {self.content}'
+        return self.priority_colors.get(self.priority).format(_content)

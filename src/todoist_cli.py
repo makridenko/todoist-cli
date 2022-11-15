@@ -15,10 +15,10 @@ def todoist_cli():
 
 
 @todoist_cli.command()
-def get_tasks_due_today() -> None:
+def today() -> None:
     """List of all today tasks from todoist"""
     connector = TodoistConnector()
-    sys.stdout.write(connector.get_tasks_due_today() + '\n')
+    sys.stdout.write(connector.today(pretty=True) + '\n')
 
 
 def main():
