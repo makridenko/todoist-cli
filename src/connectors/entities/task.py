@@ -46,3 +46,9 @@ class Task(BaseMixin):
         if due := data.get('due'):
             data['due'] = Due(**due)
         return cls(**data)
+
+
+@dataclass
+class TaskToCreate(BaseMixin):
+    content: str
+    priority: Optional[int]

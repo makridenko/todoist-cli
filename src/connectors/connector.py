@@ -8,7 +8,7 @@ from typing import List, Optional
 import requests
 from requests import Response
 
-from .entities import Due, Project, Task
+from .entities import Due, Project, Task, TaskToCreate
 
 
 class TodoistAPIWorker:
@@ -19,6 +19,7 @@ class TodoistAPIWorker:
         self.api_key = self.__get_api_key()
         if not self.api_key:
             raise Exception('Please provide an api key!')
+        self.headers = {'Authorization': f'Bearer {self.api_key}'}
 
     def __get_api_key(self) -> str:
         _parser = ConfigParser()
@@ -26,10 +27,16 @@ class TodoistAPIWorker:
         return _parser.get('DEFAULT', 'TODOIST_API_KEY')
 
     def _get(self, path: str, params: Optional[dict] = None) -> Response:
-        headers = {'Authorization': f'Bearer {self.api_key}'}
         return requests.get(
-            f"{self.URL}/{path}",
-            headers=headers,
+            f'{self.URL}/{path}',
+            headers=self.headers,
+            params=params,
+        )
+
+    def _post(self, path: str, params: dict) -> Response:
+        return requests.post(
+            f'{self.URL}/{path}',
+            headers=self.headers,
             params=params,
         )
 
@@ -52,6 +59,9 @@ class TodoistObjectsWorker:
     def get_inbox_project(self) -> Project:
         return next(prj for prj in self.get_projects() if prj.is_inbox_project)
 
+    def create_task(self, task: TaskToCreate):
+        return self._post('tasks', task.as_dict())
+
 
 class TodoistConnector(TodoistAPIWorker, TodoistObjectsWorker):
     def today(self) -> str:
@@ -71,3 +81,13 @@ class TodoistConnector(TodoistAPIWorker, TodoistObjectsWorker):
     def inbox(self) -> str:
         _tasks = self.get_tasks(project_id=self.get_inbox_project().id)
         return '\n'.join([str(task) for task in _tasks])
+
+    def add_task_to_inbox(self, content: str, priority: Optional[int] = None):
+        if priority:
+            priority = abs(priority - 5)
+
+        task_to_create = TaskToCreate(
+            content=content,
+            priority=priority,
+        )
+        self.create_task(task_to_create)
