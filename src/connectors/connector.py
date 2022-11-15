@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
 import os
+from configparser import ConfigParser
 from datetime import datetime
 from typing import List
 
 import requests
 from requests import Response
-from configparser import ConfigParser
 
 from .entities.task import Due, Task
 
@@ -39,7 +39,7 @@ class TodoistConnector:
             self.__build_task_obj(task) for task in self.__get('tasks').json()
         ]
 
-    def get_tasks_due_today(self) -> str:
+    def today(self, pretty: bool = False) -> str:
         def _filter_by_date(task: Task) -> bool:
             due: Due = getattr(task, 'due')
             if due:
@@ -48,7 +48,8 @@ class TodoistConnector:
             return False
 
         _tasks: list = self.get_tasks()
+        _tasks.reverse()
         _filtred_tasks = list(
             filter(lambda task: _filter_by_date(task), _tasks)
         )
-        return '\n'.join([task.content for task in _filtred_tasks])
+        return '\n'.join([str(task) for task in _filtred_tasks])

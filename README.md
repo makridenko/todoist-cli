@@ -22,5 +22,5 @@ TODOIST_API_KEY = your-api-key
 ## Usage
 ```sh
 tdc --help
-tdc get-tasks-due-today
+tdc today
 ```
