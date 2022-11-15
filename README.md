@@ -10,7 +10,7 @@ poetry build
 
 Then:
 ```
-pip install dist/todoist_cli-0.0.2-py3-none-any.whl
+pip install dist/todoist_cli-0.0.3-py3-none-any.whl
 ```
 
 Also, you need to create config file - `$HOME/.todoist_cli_config.cfg`:
