@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from typing import Optional
 from dataclasses import dataclass
+from typing import Optional
 
-from .enums import ProjectViewStyle
 from .base import BaseMixin
+from .enums import ProjectViewStyle
 
 
 @dataclass
