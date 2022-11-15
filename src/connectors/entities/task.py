@@ -1,13 +1,17 @@
 # -*- coding: utf-8 -*-
 
 from dataclasses import dataclass
-from typing import List, Optional
+from typing import List, Optional, Type, TypeVar
 
+from .base import BaseMixin
 from .due import Due
 
 
+_T = TypeVar('_T')
+
+
 @dataclass
-class Task:
+class Task(BaseMixin):
     id: int
     project_id: int
     content: str
@@ -36,3 +40,9 @@ class Task:
     def __str__(self) -> str:
         _content = f'- [] {self.content}'
         return self.priority_colors.get(self.priority).format(_content)
+
+    @classmethod
+    def from_dict(cls: Type[_T], data: dict) -> _T:
+        if due := data.get('due'):
+            data['due'] = Due(**due)
+        return cls(**data)

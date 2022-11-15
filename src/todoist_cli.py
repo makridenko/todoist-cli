@@ -18,7 +18,14 @@ def todoist_cli():
 def today() -> None:
     """List of all today tasks from todoist"""
     connector = TodoistConnector()
-    sys.stdout.write(connector.today(pretty=True) + '\n')
+    sys.stdout.write(connector.today() + '\n')
+
+
+@todoist_cli.command()
+def inbox() -> None:
+    """List of all tasks from inbox from todoist"""
+    connector = TodoistConnector()
+    sys.stdout.write(connector.inbox() + '\n')
 
 
 def main():
