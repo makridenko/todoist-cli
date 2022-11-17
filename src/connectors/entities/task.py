@@ -37,8 +37,10 @@ class Task(BaseMixin):
         4: '\033[91m {}\033[00m',
     }
 
-    def __str__(self) -> str:
+    def display(self, with_id: bool = False) -> str:
         _content = f'- [] {self.content}'
+        if with_id:
+            _content += f' ({self.id})'
         return self.priority_colors.get(self.priority).format(_content)
 
     @classmethod
