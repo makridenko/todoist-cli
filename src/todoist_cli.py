@@ -55,5 +55,13 @@ def add_inbox_task(content, priority) -> None:
     connector.add_task_to_inbox(content, priority)
 
 
+@todoist_cli.command()
+@click.option('-i', '--task-id', type=int, help='Task ID')
+def close(task_id: int) -> None:
+    """Closes a task"""
+    connector = TodoistConnector()
+    connector.close(task_id)
+
+
 def main():
     todoist_cli(prog_name="todoist-cli")

@@ -93,3 +93,6 @@ class TodoistConnector(TodoistAPIWorker, TodoistObjectsWorker):
             priority=priority,
         )
         self.create_task(task_to_create)
+
+    def close(self, task_id: int) -> bool:
+        return self._post(f'tasks/{task_id}/close', {})
