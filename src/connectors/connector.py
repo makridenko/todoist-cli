@@ -64,7 +64,7 @@ class TodoistObjectsWorker:
 
 
 class TodoistConnector(TodoistAPIWorker, TodoistObjectsWorker):
-    def today(self) -> str:
+    def today(self, with_id: bool = False) -> str:
         def _filter_by_date(task: Task) -> bool:
             due: Due = getattr(task, 'due')
             if due:
@@ -76,11 +76,13 @@ class TodoistConnector(TodoistAPIWorker, TodoistObjectsWorker):
         _filtred_tasks = list(
             filter(lambda task: _filter_by_date(task), _tasks)
         )
-        return '\n'.join([str(task) for task in _filtred_tasks])
+        return '\n'.join(
+            [task.display(with_id=with_id) for task in _filtred_tasks]
+        )
 
-    def inbox(self) -> str:
+    def inbox(self, with_id: bool = False) -> str:
         _tasks = self.get_tasks(project_id=self.get_inbox_project().id)
-        return '\n'.join([str(task) for task in _tasks])
+        return '\n'.join(task.display(with_id=with_id) for task in _tasks)
 
     def add_task_to_inbox(self, content: str, priority: Optional[int] = None):
         if priority:

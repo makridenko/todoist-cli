@@ -13,17 +13,29 @@ def todoist_cli():
 
 
 @todoist_cli.command()
-def today() -> None:
+@click.option(
+    '-i',
+    '--with-id',
+    is_flag=True,
+    help='Show tasks with id',
+)
+def today(with_id: bool) -> None:
     """List of all today tasks from todoist"""
     connector = TodoistConnector()
-    click.echo(connector.today())
+    click.echo(connector.today(with_id=with_id))
 
 
 @todoist_cli.command()
-def inbox() -> None:
+@click.option(
+    '-i',
+    '--with-id',
+    is_flag=True,
+    help='Show tasks with id',
+)
+def inbox(with_id: bool) -> None:
     """List of all tasks from inbox from todoist"""
     connector = TodoistConnector()
-    click.echo(connector.inbox())
+    click.echo(connector.inbox(with_id=with_id))
 
 
 @todoist_cli.command()
