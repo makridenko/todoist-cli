@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from dataclasses import dataclass
 from typing import Optional
 
+from pydantic import BaseModel
 
-@dataclass
-class Due:
+
+class Due(BaseModel):
     string: str
     date: str
     is_recurring: bool
