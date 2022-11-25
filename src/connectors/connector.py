@@ -3,7 +3,7 @@
 import os
 from configparser import ConfigParser
 from datetime import datetime
-from typing import List, Optional
+from typing import Optional
 
 import requests
 from requests import Response
@@ -42,25 +42,24 @@ class TodoistAPIWorker:
 
 
 class TodoistObjectsWorker:
-    def get_tasks(self, project_id: Optional[int] = None) -> List[Task]:
+    def get_tasks(self, project_id: Optional[int] = None) -> list[Task]:
         _params = {}
         if project_id:
             _params['project_id'] = project_id
 
         json_tasks: list = self._get('tasks', params=_params).json()
         json_tasks.reverse()
+        return [Task(**task_data) for task_data in json_tasks]
 
-        return [Task.from_dict(task) for task in json_tasks]
-
-    def get_projects(self) -> List[Project]:
+    def get_projects(self) -> list[Project]:
         json_projects = self._get('projects').json()
-        return [Project.from_dict(project) for project in json_projects]
+        return [Project(**project_data) for project_data in json_projects]
 
     def get_inbox_project(self) -> Project:
         return next(prj for prj in self.get_projects() if prj.is_inbox_project)
 
     def create_task(self, task: TaskToCreate):
-        return self._post('tasks', task.as_dict())
+        return self._post('tasks', task.dict())
 
 
 class TodoistConnector(TodoistAPIWorker, TodoistObjectsWorker):
