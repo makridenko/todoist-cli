@@ -1,14 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from dataclasses import dataclass
-from typing import Optional
+from typing import Literal, Optional
 
-from .base import BaseMixin
-from .enums import ProjectViewStyle
+from pydantic import BaseModel
 
 
-@dataclass
-class Project(BaseMixin):
+class Project(BaseModel):
     id: int
     name: str
     color: str
@@ -19,7 +16,7 @@ class Project(BaseMixin):
     is_favorite: bool
     is_inbox_project: bool
     is_team_inbox: bool
-    view_style: ProjectViewStyle
+    view_style: Literal['list', 'board']
     url: str
 
     def __str__(self) -> str:

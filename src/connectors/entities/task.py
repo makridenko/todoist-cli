@@ -1,17 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from dataclasses import dataclass
-from typing import List, Optional, Type, TypeVar
+from typing import Optional
 
-from .base import BaseMixin
+from pydantic import BaseModel
+
 from .due import Due
 
 
-_T = TypeVar('_T')
-
-
-@dataclass
-class Task(BaseMixin):
+class Task(BaseModel):
     id: int
     project_id: int
     content: str
@@ -25,12 +21,12 @@ class Task(BaseMixin):
     creator_id: int
     due: Optional[Due] = None
     parent_id: Optional[int] = None
-    labels: Optional[List[str]] = None
+    labels: Optional[list[str]] = None
     section_id: Optional[int] = None
     assignee_id: Optional[int] = None
     assigner_id: Optional[int] = None
 
-    priority_colors = {
+    __priority_colors = {
         1: '\033[97m {}\033[00m',
         2: '\033[96m {}\033[00m',
         3: '\033[93m {}\033[00m',
@@ -41,16 +37,9 @@ class Task(BaseMixin):
         _content = f'- [] {self.content}'
         if with_id:
             _content += f' ({self.id})'
-        return self.priority_colors.get(self.priority).format(_content)
-
-    @classmethod
-    def from_dict(cls: Type[_T], data: dict) -> _T:
-        if due := data.get('due'):
-            data['due'] = Due(**due)
-        return cls(**data)
+        return self.__priority_colors.get(self.priority).format(_content)
 
 
-@dataclass
-class TaskToCreate(BaseMixin):
+class TaskToCreate(BaseModel):
     content: str
     priority: Optional[int]
